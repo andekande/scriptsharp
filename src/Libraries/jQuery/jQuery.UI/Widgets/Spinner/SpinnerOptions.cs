@@ -23,6 +23,18 @@ namespace jQueryApi.UI.Widgets {
         }
 
         /// <summary>
+        /// Triggered during increment/decrement (to determine direction of spin compare current value with ui.value). Can be canceled, preventing the value from being updated.
+        /// </summary>
+        [ScriptField]
+        public jQueryUIEventHandler<SpinnerSpinEvent> Spin {
+             get {
+                return null;
+             }
+             set {
+             }
+        }
+
+        /// <summary>
         /// The maximum allowed value.
         /// </summary>
         [ScriptField]

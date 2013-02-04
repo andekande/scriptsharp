@@ -70,6 +70,7 @@
     <Compile Include="Effects\Slide\*.cs" />
     <Compile Include="Widgets\Slider\*.cs" />
     <Compile Include="Interactions\Sortable\*.cs" />
+    <Compile Include="Widgets\Spinner\SpinnerSpinEvent.cs" />
     <Compile Include="Widgets\Spinner\SpinnerMethod.cs" />
     <Compile Include="Widgets\Spinner\SpinnerObject.cs" />
     <Compile Include="Widgets\Spinner\SpinnerOption.cs" />
