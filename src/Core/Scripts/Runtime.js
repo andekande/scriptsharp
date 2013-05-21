@@ -44,6 +44,7 @@
       version: '0.8',
 
       isValue: isValue,
+      value: value,
       extend: extend,
       keys: keys,
       keyCount: keyCount,
@@ -70,6 +71,7 @@
       endsWith: endsWith,
       padLeft: padLeft,
       padRight: padRight,
+      trim: trim,
       trimStart: trimStart,
       trimEnd: trimEnd,
       trim: trim,

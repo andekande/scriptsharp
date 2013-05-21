@@ -380,17 +380,17 @@ namespace System {
         }
 
         [ScriptAlias("ss.trim")]
-        public string Trim(params char[] trimChars) {
+        public string Trim(char[] trimCharacters) {
             return null;
         }
 
         [ScriptAlias("ss.trimEnd")]
-        public string TrimEnd(params char[] trimChars) {
+        public string TrimEnd(char[] trimCharacters) {
             return null;
         }
 
         [ScriptAlias("ss.trimStart")]
-        public string TrimStart(params char[] trimChars) {
+        public string TrimStart(char[] trimCharacters) {
             return null;
         }
 

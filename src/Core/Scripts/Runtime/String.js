@@ -58,36 +58,21 @@ function format(cultureOrFormat) {
     });
 }
 
-function trim(s, trimChars) {
-  if (trimChars != null || typeof String.prototype.trim !== 'function') {
-    if (trimChars.constructor != Array) {
-      trimChars = Array.prototype.slice.call(arguments, 1);
-    }
-    return ss.trimEnd(ss.trimStart(s, trimChars), trimChars);
+function trim(s, tc) {
+  if (tc || !String.prototype.trim) {
+    tc = tc ? tc.join('') : null;
+    var r = tc ? new RegExp('^[' + tc + ']+|[' + tc + ']+$', 'g') : /^\s+|\s+$/g;
+    return s.replace(r, '');
   }
   return s.trim();
 }
-function trimStart(s, trimChars) {
-  if (trimChars != null) {
-    var values = Array.prototype.slice.call(arguments, 1);
-    if (values[0].constructor != String) {
-      values = values[0];
-    }
-    var pattern = '^[' + values.join('') + ']*';
-    return s.replace(new RegExp(pattern, ''), '');
-  }
-  return s.replace(/^\s*/, '');
+function trimStart(s, tc) {
+  var r = tc ? new RegExp('^[' + tc.join('') + ']+') : /^\s+/;
+  return s.replace(r, '');
 }
-function trimEnd(s, trimChars) {
-  if (trimChars != null) {
-    var values = Array.prototype.slice.call(arguments, 1);
-    if (values[0].constructor != String) {
-      values = values[0];
-    }
-    var pattern = '[' + values.join('') + ']*$';
-    return s.replace(new RegExp(pattern, ''), '');
-  }
-  return s.replace(/\s*$/, '');
+function trimEnd(s, tc) {
+  var r = tc ? new RegExp('[' + tc.join('') + ']+$') : /\s+$/;
+  return s.replace(r, '');
 }
 function startsWith(s, prefix) {
   if (emptyString(prefix)) {

@@ -1513,6 +1513,11 @@ Types:
                 Visibility: Public, Static
                 Generated Name: invokeMethod
                 Abstract: False
+            Method: IsFalsey
+                AssociatedType: Boolean
+                Visibility: Public, Static
+                Generated Name: isFalsey
+                Abstract: False
             Method: IsFinite
                 AssociatedType: Boolean
                 Visibility: Public, Static
@@ -1543,10 +1548,20 @@ Types:
                 Visibility: Public, Static
                 Generated Name: ss.isValue
                 Abstract: False
+            Method: IsTruthy
+                AssociatedType: Boolean
+                Visibility: Public, Static
+                Generated Name: isTruthy
+                Abstract: False
             Method: Literal
                 AssociatedType: Object
                 Visibility: Public, Static
                 Generated Name: literal
+                Abstract: False
+            Method: Or
+                AssociatedType: TValue
+                Visibility: Public, Static
+                Generated Name: or
                 Abstract: False
             Method: SetField
                 AssociatedType: Void
@@ -1566,7 +1581,7 @@ Types:
             Method: Value
                 AssociatedType: TValue
                 Visibility: Public, Static
-                Generated Name: value
+                Generated Name: ss.value
                 Abstract: False
             Method: Enumerate
                 AssociatedType: Object
@@ -1821,7 +1836,7 @@ Types:
             Method: Trim
                 AssociatedType: String
                 Visibility: Public
-                Generated Name: trim
+                Generated Name: ss.trim
                 Abstract: False
             Method: TrimEnd
                 AssociatedType: String

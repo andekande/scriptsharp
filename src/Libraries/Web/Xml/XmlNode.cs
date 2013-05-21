@@ -137,27 +137,15 @@ namespace System.Xml {
             return null;
         }
 
+        public bool HasAttributes() {
+            return false;
+        }
+
         public bool HasChildNodes() {
             return false;
         }
 
         public XmlNode InsertBefore(XmlNode child, XmlNode refChild) {
-            return null;
-        }
-
-        public XmlNode RemoveChild(XmlNode child) {
-            return null;
-        }
-
-        public XmlNode ReplaceChild(XmlNode child, XmlNode oldChild) {
-            return null;
-        }
-
-        public XmlNodeList SelectNodes(string xpath) {
-            return null;
-        }
-
-        public XmlNode SelectSingleNode(string xpath) {
             return null;
         }
 
@@ -169,7 +157,15 @@ namespace System.Xml {
             return null;
         }
 
+        public XmlNode RemoveChild(XmlNode child) {
+            return null;
+        }
+
         public string TransformNode(XmlDocument stylesheet) {
+            return null;
+        }
+
+        public XmlNode ReplaceChild(XmlNode child, XmlNode oldChild) {
             return null;
         }
     }

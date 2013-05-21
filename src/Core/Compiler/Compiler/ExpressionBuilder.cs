@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using ScriptSharp;
 using ScriptSharp.CodeModel;
@@ -317,11 +318,25 @@ namespace ScriptSharp.Compiler {
 
             if (leftExpression.Type == ExpressionType.Member) {
                 leftExpression = TransformMemberExpression((MemberExpression)leftExpression,
-                    /* getOrAdd */ (node.Operator != TokenType.Equal));
+                                                           /* getOrAdd */ (node.Operator != TokenType.Equal));
             }
 
             if (rightExpression.Type == ExpressionType.Member) {
                 rightExpression = TransformMemberExpression((MemberExpression)rightExpression);
+            }
+
+            if (node.Operator == TokenType.Coalesce) {
+                TypeSymbol scriptType = _symbolSet.ResolveIntrinsicType(IntrinsicType.Script);
+                MethodSymbol valueMethod = (MethodSymbol)scriptType.GetMember("Value");
+
+                TypeExpression scriptExpression = new TypeExpression(scriptType, SymbolFilter.Public | SymbolFilter.StaticMembers);
+                MethodExpression valueExpression = new MethodExpression(scriptExpression, valueMethod);
+
+                valueExpression.AddParameterValue(leftExpression);
+                valueExpression.AddParameterValue(rightExpression);
+                valueExpression.Reevaluate(rightExpression.EvaluatedType);
+
+                return valueExpression;
             }
 
             TypeSymbol resultType = null;
@@ -540,12 +555,7 @@ namespace ScriptSharp.Compiler {
             }
 
             if (objectExpression is LiteralExpression) {
-                object literalValue = ((LiteralExpression)objectExpression).Value;
-                if (!((literalValue is Boolean) || (literalValue is String))) {
-                    // Numeric literals need to be paranthesized in script when followed by a
-                    // dot member access.
-                    objectExpression.AddParenthesisHint();
-                }
+                objectExpression.AddParenthesisHint();
             }
 
             Debug.Assert(objectExpression.EvaluatedType is ISymbolTable);
@@ -1105,6 +1115,19 @@ namespace ScriptSharp.Compiler {
                             return new InlineScriptExpression("", objectType);
                         }
 
+                        if (args.Count > 1) {
+                            // Check whether the script is a valid string format string
+                            try {
+                                object[] argValues = new object[args.Count - 1];
+                                String.Format(CultureInfo.InvariantCulture, script, argValues);
+                            }
+                            catch {
+                                _errorHandler.ReportError("The argument to Script.Literal must be a valid String.Format string.",
+                                                          argNodes.Expressions[0].Token.Location);
+                                return new InlineScriptExpression("", objectType);
+                            }
+                        }
+
                         InlineScriptExpression scriptExpression = new InlineScriptExpression(script, objectType);
                         for (int i = 1; i < args.Count; i++) {
                             scriptExpression.AddParameterValue(args[i]);
@@ -1115,9 +1138,22 @@ namespace ScriptSharp.Compiler {
                     else if (method.Name.Equals("Boolean", StringComparison.Ordinal)) {
                         Debug.Assert(args.Count == 1);
 
+                        args[0].AddParenthesisHint();
                         return new UnaryExpression(Operator.LogicalNot, new UnaryExpression(Operator.LogicalNot, args[0]));
                     }
-                    else if (method.Name.Equals("Value", StringComparison.Ordinal)) {
+                    else if (method.Name.Equals("IsTruthy", StringComparison.Ordinal)) {
+                        Debug.Assert(args.Count == 1);
+
+                        args[0].AddParenthesisHint();
+                        return new UnaryExpression(Operator.LogicalNot, new UnaryExpression(Operator.LogicalNot, args[0]));
+                    }
+                    else if (method.Name.Equals("IsFalsey", StringComparison.Ordinal)) {
+                        Debug.Assert(args.Count == 1);
+
+                        args[0].AddParenthesisHint();
+                        return new UnaryExpression(Operator.LogicalNot, args[0]);
+                    }
+                    else if (method.Name.Equals("Or", StringComparison.Ordinal)) {
                         Debug.Assert(args.Count >= 2);
 
                         Expression expr = args[0];
