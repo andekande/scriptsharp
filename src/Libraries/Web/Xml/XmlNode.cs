@@ -71,8 +71,7 @@ namespace System.Xml {
         }
 
         [ScriptField]
-        public XmlNode NextElementSibling
-        {
+        public XmlNode NextElementSibling {
             get {
                 return null;
             }
